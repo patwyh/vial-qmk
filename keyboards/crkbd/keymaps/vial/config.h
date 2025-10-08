@@ -38,17 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define MASTER_RIGHT
 // #define EE_HANDS
 
-// Cirque Trackpad Pin Definitions
-#define POINTING_DEVICE_CLOCK_PIN  GP7
-#define POINTING_DEVICE_DATA_PIN   GP8  // MOSI
-#define POINTING_DEVICE_CS_PIN     GP6
-#define POINTING_DEVICE_MISO_PIN   GP4
-
-// Gesture Support (1-2 finger detection)
-#define CIRQUE_PINNACLE_TAP_ENABLE yes     // Enables tap-to-click
-#define CIRQUE_PINNACLE_CIRCULAR_SCROLL yes // For circular scrolling if supported
-
-
 #define USE_SERIAL_PD2
 #ifdef RGBLIGHT_ENABLE
 #    undef RGBLIGHT_LED_COUNT
