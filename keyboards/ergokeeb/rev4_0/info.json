@@ -5,7 +5,7 @@
     "usb": {
         "vid": "0x4653",
         "suspend_wakeup_delay": 200,
-        "device_version": "4.1.0"
+        "device_version": "4.0.0"
     },
     "processor": "RP2040",
     "bootloader": "rp2040",
@@ -49,16 +49,6 @@
         "handedness": {
             "pin": "GP21"
         },
-        // "matrix_pins": {
-        //     "right": {
-        //         "direct": [
-        //             [ "GP8",  "GP9",  "GP3",  "GP2",  "GP1", "GP27", "GP25"],
-        //             ["GP11", "GP14",  "GP4",  "GP0", "GP28", "GP26", "GP23"],
-        //             ["GP15", "GP18",  "GP5", "GP29", "GP20", "GP22",   null],
-        //             [  null,   null,   null, "GP16", "GP17", "GP19",   null]
-        //         ]
-        //     }
-        // },
         "matrix_pins": {
             "right": {
                 "direct": [
@@ -85,6 +75,10 @@
                 "matrix_state": true
             },
             "watchdog": true
+
+        },
+        "usb_detect": {
+            "timeout": 500
         }
     },
     "community_layouts": [ "split_3x5_3", "split_3x6_3" ],
