@@ -23,7 +23,7 @@
 #define SPI_MISO_PIN GP16
 
 // Trackpad diameter (required for scaling and calibration)
-#define CIRQUE_PINNACLE_DIAMETER_MM 35 //23 //35 //40
+#define CIRQUE_PINNACLE_DIAMETER_MM 23 //23 //35 //40
 
 // Optional enhancements
 #define CIRQUE_PINNACLE_TAP_ENABLE                  // Enable single-tap for left-click

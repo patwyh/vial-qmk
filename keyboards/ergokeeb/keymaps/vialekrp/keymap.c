@@ -88,7 +88,6 @@ void keyboard_post_init_user(void) {
     setPinOutput(LCD_BACKLIGHT_PIN);
     writePinHigh(LCD_BACKLIGHT_PIN);
 
-    //backlight_enable();
     display = qp_st7789_make_spi_device(LCD_WIDTH, LCD_HEIGHT, SPI_CS_PIN, LCD_DC_PIN, LCD_RESET_PIN, SPI_DIVISOR, SPI_MODE );
 
     qp_init(display, QP_ROTATION_0);  // Adjust rotation: 0, 90, 180, or 270
@@ -96,7 +95,7 @@ void keyboard_post_init_user(void) {
     qp_clear(display);                // Clear screen on startup
     
     backlight_enable();
-    backlight_level(4); // Sets backlight to level 3
+    backlight_level(2); // Sets backlight to level 3
 
     // 背景描画
     // qp_rect(display, startPos[X], startPos[Y], endPos[X], endPos[Y], black[HUE], black[SAT], black[VAL], true);
