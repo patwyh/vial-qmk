@@ -3,4 +3,5 @@ VIAL_ENABLE        = yes
 VIALRGB_ENABLE     = no
 ENCODER_MAP_ENABLE = yes
 
-SRC += my_image.qgf.c
+SRC += image/my_image.qgf.c
+SRC += font/arial.qff.c

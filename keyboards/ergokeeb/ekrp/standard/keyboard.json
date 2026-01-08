@@ -23,11 +23,11 @@
     },
     "diode_direction": "COL2ROW",
     "dynamic_keymap": {
-        "layer_count": 6
+        "layer_count": 8
     },
     "matrix_pins": {
         "cols": ["GP29", "GP28", "GP27", "GP26", "GP22", "GP20"],
-        "rows": [ "GP4", "GP5" ,"GP6", "GP7" ]
+        "rows": [ "GP4", "GP5" ,"GP6", "GP7" ]              
     },
     // "encoder": {
     //     "rotary": [
