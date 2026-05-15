@@ -52,18 +52,24 @@
         "matrix_pins": {
             "right": {
                 "direct": [
-                    [ "GP8",  "GP9",  "GP3",  "GP2",  "GP1", "GP27", "GP25"],
-                    ["GP11", "GP14",  "GP4",  "GP0", "GP28", "GP26", "GP23"],
-                    ["GP15", "GP18",  "GP5", "GP29", "GP20", "GP22",   null],
-                    [  null,   null,   null, "GP16", "GP17", "GP19",   null]
+                    // [ "GP8",  "GP9",  "GP3",  "GP2",  "GP1", "GP27", "GP25"],
+                    // ["GP11", "GP14",  "GP4",  "GP0", "GP28", "GP26", "GP23"],
+                    // ["GP15", "GP18",  "GP5", "GP29", "GP20", "GP22",   null],
+                    // [  null,   null,   null, "GP16", "GP17", "GP19",   null]
+                    ["GP25",   "GP9",    "GP3",    "GP2",  "GP1",  "GP27",   "GP4"],
+                    ["GP11",   "GP14",   "GP23",   "GP0",  "GP28", "GP26",   "GP8"],
+                    ["GP15",   "GP18",   "GP24",   "GP29", "GP20", "GP22",   null],
+                    [ null,    null,     null,     "GP16", "GP17", "GP19",   null]
                 ]
             }
         },
         "encoder": {
             "right": {
                 "rotary": [
-                    {"pin_a": "GP24", "pin_b":  "GP7"},
-                    {"pin_a":  "GP6", "pin_b":  "GP7"}
+                    // {"pin_a": "GP24", "pin_b":  "GP7"},
+                    // {"pin_a":  "GP6", "pin_b":  "GP7"}
+                    {"pin_a": "GP5", "pin_b": "GP7"},
+                    {"pin_a": "GP6", "pin_b": "GP7"}
                 ]
             }
         },
