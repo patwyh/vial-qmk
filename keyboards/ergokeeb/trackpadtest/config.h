@@ -22,8 +22,8 @@
 #define CIRQUE_PINNACLE_SPI_CS_PIN GP5
 
 // Trackpad Physical Dimensions (Change to 40 if you have the larger one)
-#define CIRQUE_PINNACLE_DIAMETER_MM 35
-#define CIRQUE_PINNACLE_CURVED_OVERLAY
+#define CIRQUE_PINNACLE_DIAMETER_MM 23
+//#define CIRQUE_PINNACLE_CURVED_OVERLAY
 #define CIRQUE_DEVICE_GESTURES_SCROLL_ENABLE // Circular scroll.
 #define CIRQUE_PINNACLE_TAP_ENABLE
 
