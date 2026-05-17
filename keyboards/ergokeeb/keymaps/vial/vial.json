@@ -2,8 +2,10 @@
     "name": "ergokeeb",
     "vendorId": "0x434",
     "productId": "0x0325",
+    "lighting": {
+      "extends": "qmk_rgblight"
+    },
     "matrix": {"rows": 8, "cols": 6},
-    "lighting": "vialrgb",
     "layouts": {
         "keymap": [
             ["0,0","0,1","0,2","0,3","0,4","0,5",{"x": 1},"4,0","4,1","4,2","4,3","4,4","4,5"],
