@@ -24,7 +24,8 @@
 #define CIRQUE_PINNACLE_DIAMETER_MM 23
 //#define CIRQUE_PINNACLE_CURVED_OVERLAY
 #define CIRQUE_DEVICE_GESTURES_SCROLL_ENABLE // Circular scroll.
-#define CIRQUE_PINNACLE_TAP_ENABLE
+#define CIRQUE_PINNACLE_TAP_ENABLE_RIGHT
 
-// Optional: Adjust sensitivity/speed if it feels too slow or fast
-#define POINTING_DEVICE_ROTATION_180 // Uncomment if your ribbon cable exits to the right
+#define SPLIT_POINTING_ENABLE
+#define POINTING_DEVICE_COMBINED
+#define POINTING_DEVICE_ROTATION_180_RIGHT // Uncomment if your ribbon cable exits to the right
