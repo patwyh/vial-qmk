@@ -23,46 +23,27 @@
             "keyboard": true
         }
     },
-    "diode_direction": "ROW2COL",
     "matrix_pins": {
-     "direct":[
-            ["GP22", "GP20", "GP23", "GP26", "GP29",  "GP0",  "GP4"],
-            ["GP19", "GP18", "GP24", "GP27",  "GP1",  "GP2",  "GP8"],
-            ["GP17", "GP16", "GP25", "GP28",  "GP3",  "GP9",   null],
-            [  null,   null,   null, "GP14", "GP15", "GP11",   null]
-        ]
+        "cols": ["GP29", "GP28", "GP27", "GP26", "GP22", "GP20", "GP23"],
+        "rows": ["GP4", "GP5", "GP6", "GP7"]
     },
+    "diode_direction": "ROW2COL",
     "split": {
         "enabled": true,
         "bootmagic": {
             "matrix": [ 4, 1 ]
         },
         "handedness": {
-            "pin": "GP21"
+            "pin": "GP12"
         },
-        "matrix_pins": {
-            "right": {
-                "direct": [
-                    // orginal corne pin control
-                    // [ "GP8",  "GP9",  "GP3",  "GP2",  "GP1", "GP27", "GP25"],
-                    // ["GP11", "GP14",  "GP4",  "GP0", "GP28", "GP26", "GP23"],
-                    // ["GP15", "GP18",  "GP5", "GP29", "GP20", "GP22",   null],
-                    // [  null,   null,   null, "GP16", "GP17", "GP19",   null]
-                    ["GP25",   "GP9",    "GP3",    "GP2",  "GP1",  "GP27",   "GP4"],
-                    ["GP11",   "GP14",   "GP23",   "GP0",  "GP28", "GP26",   "GP8"],
-                    ["GP15",   "GP18",   "GP24",   "GP29", "GP20", "GP22",   null],
-                    [ null,    null,     null,     "GP16", "GP17", "GP19",   null]
-                ]
-            }
-        },
-        "encoder": {
-            "right": {
-                "rotary": [
-                    {"pin_a": "GP5", "pin_b": "GP7"},
-                    {"pin_a": "GP6", "pin_b": "GP7"}
-                ]
-            }
-        },
+        // "encoder": {
+        //     "right": {
+        //         "rotary": [
+        //             {"pin_a": "GP5", "pin_b": "GP7"},
+        //             {"pin_a": "GP6", "pin_b": "GP7"}
+        //         ]
+        //     }
+        // },
         "serial": {
             "driver": "vendor"
         },
@@ -131,12 +112,12 @@
     },
     "ws2812": {
         "driver": "vendor",
-        "pin": "GP10"
+        "pin": "GP1"
     },
     "rgblight": {
-        "led_count": 46,
+        "led_count": 42,
         "split": true,
-        "split_count": [23, 23],
+        "split_count": [21, 21],
         "max_brightness": 50,
         "animations": {
             "alternating": true,
@@ -200,7 +181,7 @@
             "solid_multisplash": true
         },
         "sleep": true,
-        "split_count": [23, 23],
+        "split_count": [21, 21],
         "layout": [
             {"matrix": [3, 5], "x": 95, "y": 63, "flags": 4},
             {"matrix": [2, 5], "x": 85, "y": 39, "flags": 4},
