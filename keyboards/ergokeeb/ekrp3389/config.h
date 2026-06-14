@@ -20,25 +20,8 @@
 
 #define PICO_XOSC_STARTUP_DELAY_MULTIPLIER 64
 
-// Trackpad diameter (required for scaling and calibration)
-#define CIRQUE_PINNACLE_DIAMETER_MM 23 //23 //35 //40
-
-// Optional enhancements
-#define CIRQUE_PINNACLE_TAP_ENABLE                  // Enable single-tap for left-click
-#define CIRQUE_PINNACLE_SECONDARY_TAP_ENABLE        // Enable secondary tap (e.g., right-click)
-#define POINTING_DEVICE_GESTURES_SCROLL_ENABLE      // Enable edge/circular scrolling
-#define POINTING_DEVICE_ROTATION_90                 // Adjust if the trackpad orientation requires rotation (common in split keyboards) default left, 270 top
-
-#define POINTING_DEVICE_GESTURES_CURSOR_GLIDE_ENABLE              // (Optional) Enable inertial cursor. Cursor continues moving after a flick gesture and slows down by kinetic friction.
-
-// Chip Select pin for the trackpad
-#define CIRQUE_PINNACLE_SPI_CS_PIN GP17 
-#define CIRQUE_PINNACLE_SPI_CS_PIN_RIGHT GP17
-
-#define POINTING_DEVICE_COMBINED
+#define POINTING_DEVICE_RIGHT //POINTING_DEVICE_COMBINED
 #define SPLIT_POINTING_ENABLE
-
-//#define MASTER_RIGHT
 
 // ST7789 Display configuration
 #define ST7789_NUM_DEVICES 1
@@ -62,6 +45,14 @@
 #define SPI_MISO_PIN    GP16     // Master <- Slave
 #define SPI_DIVISOR     1    // SPI Clock Divisor
 #define SPI_MODE        3
+
+#define PMW33XX_CS_PIN      GP17    
+#define PMW3389_CPI         16000  // Sets default tracking speed (CPI range: 50-16000 
+#define POINTING_DEVICE_INVERT_Y
+
+//#define POINTING_DEVICE_GESTURES_SCROLL_ENABLE      // Enable edge/circular scrolling
+//#define POINTING_DEVICE_ROTATION_90                 // Adjust if the trackpad orientation requires rotation (common in split keyboards) default left, 270 top
+
 
 /* LCD setting */
 #define LCD_RESET_PIN       GP24
