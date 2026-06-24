@@ -53,7 +53,6 @@
 //#define POINTING_DEVICE_GESTURES_SCROLL_ENABLE      // Enable edge/circular scrolling
 //#define POINTING_DEVICE_ROTATION_90                 // Adjust if the trackpad orientation requires rotation (common in split keyboards) default left, 270 top
 
-
 /* LCD setting */
 #define LCD_RESET_PIN       GP24
 #define LCD_BACKLIGHT_PIN   GP10
