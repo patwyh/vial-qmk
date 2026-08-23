@@ -84,5 +84,5 @@
 #define BACKLIGHT_ON_STATE 0   // Use 1 for high-active (common) or 0 for low-active
 #define BACKLIGHT_DEFAULT_ON true    // Ensure backlight is ON by default
 
-//#define QUANTUM_PAINTER_LVGL_USE_CUSTOM_CONF
+#define QUANTUM_PAINTER_LVGL_USE_CUSTOM_CONF
 #define QUANTUM_PAINTER_DISPLAY_TIMEOUT 0

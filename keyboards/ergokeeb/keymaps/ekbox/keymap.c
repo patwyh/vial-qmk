@@ -14,17 +14,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                     KC_LGUI, MO(1),   KC_SPC,    KC_ENT,  MO(2),   KC_RALT
                    // Left Thumb Cluster        Right Thumb Cluster
   )
-  ,
-  [1] = LAYOUT_split_3x5_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0, 
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX, 
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, 
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------+--------|
-                                KC_LGUI, _______,  KC_SPC,              KC_ENT, _______, KC_RALT                   
-  )
 };
 
 #ifdef ENCODER_MAP_ENABLE
