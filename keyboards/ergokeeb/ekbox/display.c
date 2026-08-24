@@ -85,8 +85,14 @@ bool display_init_kb(void) {
 
     backlight_enable();
 
-    painter_device_t display = qp_st7789_make_spi_device(240, 300, SPI_CS_PIN, SPI_DC_PIN, SPI_RESET_PIN, 16, 3);
-    qp_set_viewport_offsets(display, 0, 20);
+    // painter_device_t display = qp_st7789_make_spi_device(240, 300, SPI_CS_PIN, SPI_DC_PIN, SPI_RESET_PIN, 16, 3);
+    // qp_set_viewport_offsets(display, 0, 20);
+
+    // 1. Pass width = 135, height = 240 to the display initializer
+    painter_device_t display = qp_st7789_make_spi_device(135, 240, SPI_CS_PIN, SPI_DC_PIN, SPI_RESET_PIN, 16, 3);
+
+    // 2. Adjust offsets (Standard 135x240 ST7789 modules require X offset = 52 or 53, Y offset = 40)
+    qp_set_viewport_offsets(display, 52, 40);
 
     if (!qp_init(display, QP_ROTATION_180) || !qp_power(display, true) || !qp_lvgl_attach(display)) return false;
 
