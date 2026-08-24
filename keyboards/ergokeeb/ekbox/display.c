@@ -85,7 +85,7 @@ bool display_init_kb(void) {
 
     backlight_enable();
 
-    painter_device_t display = qp_st7789_make_spi_device(240, 300, LCD_CS_PIN, LCD_DC_PIN, LCD_RST_PIN, 16, 3);
+    painter_device_t display = qp_st7789_make_spi_device(240, 300, SPI_CS_PIN, SPI_DC_PIN, SPI_RESET_PIN, 16, 3);
     qp_set_viewport_offsets(display, 0, 20);
 
     if (!qp_init(display, QP_ROTATION_180) || !qp_power(display, true) || !qp_lvgl_attach(display)) return false;

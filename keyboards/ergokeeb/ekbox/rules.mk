@@ -11,3 +11,5 @@ BACKLIGHT_DRIVER = pwm
 CONSOLE_ENABLE = yes
 
 QUANTUM_PAINTER_LVGL_INTEGRATION = yes
+SRC += lvgl_helpers.c \
+	   display.c

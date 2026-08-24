@@ -62,6 +62,8 @@
 #define SPI_SCK_PIN     GP18     // Clock
 #define SPI_MOSI_PIN    GP19     // Master -> Slave
 #define SPI_MISO_PIN    GP16     // Master <- Slave
+#define SPI_RESET_PIN   GP24
+#define SPI_DC_PIN      GP25
 #define SPI_DIVISOR     1    // SPI Clock Divisor
 #define SPI_MODE        3
 
