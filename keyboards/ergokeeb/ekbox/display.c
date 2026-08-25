@@ -4,6 +4,7 @@
 #include "display.h"
 #include "qp.h"
 #include "lvgl_helpers.h"
+#include "wpm.h"
 
 /* shared styles */
 lv_style_t style_screen;
@@ -19,7 +20,21 @@ static lv_obj_t *label_shift;
 static lv_obj_t *label_ctrl;
 static lv_obj_t *label_alt;
 static lv_obj_t *label_gui;
-static lv_obj_t *label_caps;
+//static lv_obj_t *label_caps;
+static lv_obj_t *label_wpm;
+static lv_obj_t *label_layer;
+
+// Helper function to map layer index to a name
+static const char *get_layer_name(uint8_t layer) {
+    switch (layer) {
+        case 0:  return "L0: BASE";
+        case 1:  return "L1: NAV";
+        case 2:  return "L2: NUM";
+        case 3:  return "L3: SYM";
+        case 4:  return "L4: MEDIA";
+        default: return "L: EXTRA";
+    }
+}
 
 void init_styles(void) {
     lv_style_init(&style_screen);
@@ -71,13 +86,26 @@ void init_screen_home(void) {
     label_ctrl  = create_button(mods_row2, "CTL", &style_button, &style_button_active);
     label_shift = create_button(mods_row2, "SFT", &style_button, &style_button_active);
 
-    lv_obj_t *label_stront = lv_label_create(screen_home);
-    lv_label_set_text(label_stront, "stront");
-#if LV_FONT_MONTSERRAT_48
-    lv_obj_set_style_text_font(label_stront, &lv_font_montserrat_48, LV_PART_MAIN);
-#endif
+    // lv_obj_t *label_ekbox = lv_label_create(screen_home);
+    // lv_label_set_text(label_ekbox, "ekbox");
+    // #if LV_FONT_MONTSERRAT_28
+    //     lv_obj_set_style_text_font(label_ekbox, &lv_font_montserrat_28, LV_PART_MAIN);
+    // #endif
+    label_wpm = lv_label_create(screen_home);
+    lv_label_set_text(label_wpm, "0 WPM");
+    #if LV_FONT_MONTSERRAT_28
+        lv_obj_set_style_text_font(label_wpm, &lv_font_montserrat_28, LV_PART_MAIN);
+    #endif
 
-    label_caps = create_button(screen_home, "CAPS", &style_button, &style_button_active);
+    //label_caps = create_button(screen_home, "CAPS", &style_button, &style_button_active);
+    label_layer = create_button(screen_home, "L0: BASE", &style_button, &style_button_active);
+}
+
+void display_process_layer(layer_state_t state) {
+    uint8_t highest_layer = get_highest_layer(state);
+    if (label_layer) {
+        lv_label_set_text(label_layer, get_layer_name(highest_layer));
+    }
 }
 
 bool display_init_kb(void) {
@@ -123,9 +151,13 @@ __attribute__((weak)) void display_housekeeping_task(void) {
     toggle_state(label_ctrl, LV_STATE_PRESSED, MODS_CTRL);
     toggle_state(label_alt, LV_STATE_PRESSED, MODS_ALT);
     toggle_state(label_gui, LV_STATE_PRESSED, MODS_GUI);
+    
+    if (label_wpm) {
+        lv_label_set_text_fmt(label_wpm, "%u WPM", get_current_wpm());
+    }
 }
 
-__attribute__((weak)) void display_process_caps(bool active) {
-    dprint("display_process_caps\n");
-    toggle_state(label_caps, LV_STATE_PRESSED, active);
-}
+// __attribute__((weak)) void display_process_caps(bool active) {
+//     dprint("display_process_caps\n");
+//     toggle_state(label_caps, LV_STATE_PRESSED, active);
+// }

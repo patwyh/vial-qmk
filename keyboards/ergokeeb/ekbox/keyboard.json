@@ -49,7 +49,8 @@
         },
         "transport": {
             "sync": {
-                "matrix_state": true
+                "matrix_state": true,
+                "modifiers": true
             },
             "watchdog": true
         }

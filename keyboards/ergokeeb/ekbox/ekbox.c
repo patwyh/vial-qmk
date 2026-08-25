@@ -11,16 +11,24 @@ bool is_display_enabled(void) {
     return display_enabled;
 }
 
-
-/* Caps Lock processing */
-bool led_update_kb(led_t led_state) {
-    bool res = led_update_user(led_state);
-    if (res && display_enabled) {
-        display_process_caps(led_state.caps_lock);
+// Intercept layer state changes and update display
+layer_state_t layer_state_set_kb(layer_state_t state) {
+    state = layer_state_set_user(state);
+    if (display_enabled) {
+        display_process_layer(state);
     }
-
-    return res;
+    return state;
 }
+
+// /* Caps Lock processing */
+// bool led_update_kb(led_t led_state) {
+//     bool res = led_update_user(led_state);
+//     if (res && display_enabled) {
+//         display_process_caps(led_state.caps_lock);
+//     }
+
+//     return res;
+// }
 
 void housekeeping_task_kb(void) {
     if (display_enabled) {

@@ -72,7 +72,7 @@ void keyboard_post_init_user(void) {
     // Draw the text (device, x, y, font_handle, text)
     my_font = qp_load_font_mem(font_arial);
     if (my_font != NULL) {
-        static const char *text = "QMK!";
+        static const char *text = "EKBOX";
         int16_t width = qp_textwidth(my_font, text);
         qp_drawtext(display, (135 - width), (240 - my_font->line_height), my_font, text); 
     }

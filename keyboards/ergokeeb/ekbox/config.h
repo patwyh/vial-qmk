@@ -15,7 +15,7 @@
 #define MATRIX_ROWS_PER_SIDE (MATRIX_ROWS / 2)
 #define MATRIX_COLS 5
 
-#define MASTER_RIGHT
+#define MASTER_LEFT
 //#define EE_HANDS
 
 /* RP2040- and hardware-specific config */

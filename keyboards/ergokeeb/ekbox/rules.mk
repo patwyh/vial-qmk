@@ -10,7 +10,8 @@ BACKLIGHT_ENABLE = yes
 BACKLIGHT_DRIVER = pwm
 
 CONSOLE_ENABLE = yes
-VIAL_ENABLE = yes
+WPM_ENABLE = yes
+SPLIT_WPM_ENABLE = yes
 
 SRC += lvgl_helpers.c \
 	   display.c
