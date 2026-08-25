@@ -94,7 +94,7 @@ bool display_init_kb(void) {
     // 2. Adjust offsets (Standard 135x240 ST7789 modules require X offset = 52 or 53, Y offset = 40)
     qp_set_viewport_offsets(display, 52, 40);
 
-    if (!qp_init(display, QP_ROTATION_180) || !qp_power(display, true) || !qp_lvgl_attach(display)) return false;
+    if (!qp_init(display, QP_ROTATION_0) || !qp_power(display, true) || !qp_lvgl_attach(display)) return false;
 
     dprint("display_init_kb - initialised\n");
 
