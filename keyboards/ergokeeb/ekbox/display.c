@@ -27,12 +27,12 @@ static lv_obj_t *label_layer;
 // Helper function to map layer index to a name
 static const char *get_layer_name(uint8_t layer) {
     switch (layer) {
-        case 0:  return "L0: BASE";
-        case 1:  return "L1: NAV";
-        case 2:  return "L2: NUM";
-        case 3:  return "L3: SYM";
-        case 4:  return "L4: MEDIA";
-        default: return "L: EXTRA";
+        case 0:  return "0 BASE";
+        case 1:  return "1 NAV";
+        case 2:  return "2 NUM";
+        case 3:  return "3 SYM";
+        case 4:  return "4 MEDIA";
+        default: return "5 EXTRA";
     }
 }
 
@@ -92,13 +92,13 @@ void init_screen_home(void) {
     //     lv_obj_set_style_text_font(label_ekbox, &lv_font_montserrat_28, LV_PART_MAIN);
     // #endif
     label_wpm = lv_label_create(screen_home);
-    lv_label_set_text(label_wpm, "0 WPM");
-    #if LV_FONT_MONTSERRAT_28
-        lv_obj_set_style_text_font(label_wpm, &lv_font_montserrat_28, LV_PART_MAIN);
+    lv_label_set_text(label_wpm, "0");
+    #if LV_FONT_MONTSERRAT_48
+        lv_obj_set_style_text_font(label_wpm, &lv_font_montserrat_48, LV_PART_MAIN);
     #endif
 
     //label_caps = create_button(screen_home, "CAPS", &style_button, &style_button_active);
-    label_layer = create_button(screen_home, "L0: BASE", &style_button, &style_button_active);
+    label_layer = create_button(screen_home, "0 BASE", &style_button, &style_button_active);
 }
 
 void display_process_layer(layer_state_t state) {
@@ -153,7 +153,7 @@ __attribute__((weak)) void display_housekeeping_task(void) {
     toggle_state(label_gui, LV_STATE_PRESSED, MODS_GUI);
     
     if (label_wpm) {
-        lv_label_set_text_fmt(label_wpm, "%u WPM", get_current_wpm());
+        lv_label_set_text_fmt(label_wpm, "%u", get_current_wpm());
     }
 }
 
