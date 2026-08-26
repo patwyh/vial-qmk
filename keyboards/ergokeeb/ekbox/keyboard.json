@@ -12,6 +12,7 @@
     "processor": "RP2040",
     "bootloader": "rp2040",
     "features": {
+        "backlight": true,
         "bootmagic": true,
         "extrakey": true,
         "nkro": true,
@@ -32,6 +33,10 @@
     "bootmagic": {
         "enabled": true,
         "matrix": [ 0, 1 ]
+    },
+    "backlight": {
+        "pin": "GP10",
+        "levels": 5
     },
     "split": {
         "enabled": true,

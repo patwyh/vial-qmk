@@ -26,6 +26,16 @@ static lv_obj_t *arc_wpm; // Arc object reference
 static lv_obj_t *label_layer;
 static lv_obj_t *label_key_press;
 
+#define WPM_MAX 140 // Maximum WPM target for full arc gauge
+static uint8_t smoothed_wpm = 0; // Stores smoothed WPM state
+
+// Maps WPM speed to a color hue transition (e.g., Cool Blue -> Green -> Vibrant Orange)
+static lv_color_t get_wpm_color(uint8_t wpm) {
+    if (wpm > WPM_MAX) wpm = WPM_MAX;
+    // Smoothly shift hue from ~200 (light blue) down to 0 (red/orange) based on speed
+    uint16_t hue = 200 - ((uint32_t)wpm * 200 / WPM_MAX);
+    return lv_color_hsv_to_rgb(hue, 85, 100);
+}
 
 // Helper function to map layer index to a name
 static const char *get_layer_name(uint8_t layer) {
@@ -96,11 +106,21 @@ void init_screen_home(void) {
     screen_home = lv_scr_act();
 
     lv_obj_add_style(screen_home, &style_screen, 0);
-    use_flex_column(screen_home);
+    
+    // Stack items tightly from top to bottom instead of stretching them apart
+    lv_obj_set_layout(screen_home, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(screen_home, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(screen_home, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    
+    // Zero out padding and gaps on the main screen container
+    lv_obj_set_style_pad_all(screen_home, 0, 0);
+    lv_obj_set_style_pad_row(screen_home, 2, 0);
 
+    // --- Top Modifier Rows ---
     lv_obj_t *mods = lv_obj_create(screen_home);
     lv_obj_add_style(mods, &style_container, 0);
     use_flex_column(mods);
+    lv_obj_set_style_pad_row(mods, 0, 0); // Remove gap between mod rows
 
     lv_obj_t *mods_row1 = lv_obj_create(mods);
     lv_obj_add_style(mods_row1, &style_container, 0);
@@ -114,39 +134,33 @@ void init_screen_home(void) {
     label_ctrl  = create_button(mods_row2, "CTL", &style_button, &style_button_active);
     label_shift = create_button(mods_row2, "SFT", &style_button, &style_button_active);
 
-    // lv_obj_t *label_ekbox = lv_label_create(screen_home);
-    // lv_label_set_text(label_ekbox, "ekbox");
-    // #if LV_FONT_MONTSERRAT_28
-    //     lv_obj_set_style_text_font(label_ekbox, &lv_font_montserrat_28, LV_PART_MAIN);
-    // #endif
-
-    // --- WPM Arc Container ---
-    lv_obj_t *wpm_cont = lv_obj_create(screen_home);
-    lv_obj_add_style(wpm_cont, &style_container, 0);
-    use_flex_column(wpm_cont);
-
-    // Create Arc
-    arc_wpm = lv_arc_create(wpm_cont);
-    lv_obj_set_size(arc_wpm, 100, 100);
-    lv_arc_set_rotation(arc_wpm, 135);        // Rotate to start from bottom-left
-    lv_arc_set_bg_angles(arc_wpm, 0, 270);    // Background arc spans 270 degrees
-    lv_arc_set_range(arc_wpm, 0, 140);        // Max WPM scale (e.g., 0 to 140 WPM)
+    // --- Middle WPM Dynamic Arc (Reduced from 130px to 90px) ---
+    arc_wpm = lv_arc_create(screen_home);
+    lv_obj_set_size(arc_wpm, 90, 90);
+    lv_arc_set_rotation(arc_wpm, 135);
+    lv_arc_set_bg_angles(arc_wpm, 0, 270);
+    lv_arc_set_range(arc_wpm, 0, WPM_MAX);
     lv_arc_set_value(arc_wpm, 0);
-    lv_obj_remove_style(arc_wpm, NULL, LV_PART_KNOB); // Hide interactive knob
+
+    lv_obj_remove_style(arc_wpm, NULL, LV_PART_KNOB);
     lv_obj_clear_flag(arc_wpm, LV_OBJ_FLAG_CLICKABLE);
+    
+    // Remove arc padding so it doesn't take invisible extra height
+    lv_obj_set_style_pad_all(arc_wpm, 0, 0);
 
-    // Styling the Arc
-    lv_obj_set_style_arc_color(arc_wpm, lv_palette_main(LV_PALETTE_GREY), LV_PART_MAIN);
-    lv_obj_set_style_arc_color(arc_wpm, lv_palette_main(LV_PALETTE_AMBER), LV_PART_INDICATOR);
-    lv_obj_set_style_arc_width(arc_wpm, 8, LV_PART_MAIN);
-    lv_obj_set_style_arc_width(arc_wpm, 8, LV_PART_INDICATOR);
+    lv_obj_set_style_arc_width(arc_wpm, 6, LV_PART_MAIN);
+    lv_obj_set_style_arc_color(arc_wpm, lv_color_make(40, 40, 40), LV_PART_MAIN);
 
-    // Create WPM Text Label below the arc
-    label_wpm = lv_label_create(wpm_cont);
+    lv_obj_set_style_arc_width(arc_wpm, 6, LV_PART_INDICATOR);
+    lv_obj_set_style_arc_color(arc_wpm, lv_palette_main(LV_PALETTE_LIGHT_BLUE), LV_PART_INDICATOR);
+
+    // WPM Label inside arc
+    label_wpm = lv_label_create(arc_wpm);
     lv_label_set_text(label_wpm, "0");
-    #if LV_FONT_MONTSERRAT_28
-        lv_obj_set_style_text_font(label_wpm, &lv_font_montserrat_28, LV_PART_MAIN);
-    #endif
+    lv_obj_set_style_text_align(label_wpm, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_center(label_wpm);
+    // Use standard/smaller font so it fits inside 90px arc
+    lv_obj_set_style_text_font(label_wpm, LV_FONT_DEFAULT, LV_PART_MAIN);
 
     //label_caps = create_button(screen_home, "CAPS", &style_button, &style_button_active);
     label_layer = create_button(screen_home, "0 BASE", &style_button, &style_button_active);
@@ -210,8 +224,31 @@ __attribute__((weak)) void display_housekeeping_task(void) {
     toggle_state(label_alt, LV_STATE_PRESSED, MODS_ALT);
     toggle_state(label_gui, LV_STATE_PRESSED, MODS_GUI);
     
-    if (label_wpm) {
-        lv_label_set_text_fmt(label_wpm, "%u", get_current_wpm());
+    // if (label_wpm) {
+    //     lv_label_set_text_fmt(label_wpm, "%u", get_current_wpm());
+    // }
+    // Live update WPM Gauge & Color
+    uint8_t raw_wpm = get_current_wpm();
+    // 1. Force 0 WPM if value jittering at 1 or 2 while idle
+    if (raw_wpm <= 2) {
+        raw_wpm = 0;
+    }
+
+    // 2. Exponential Moving Average (Smooth out rapid changes)
+    smoothed_wpm = (smoothed_wpm * 3 + raw_wpm) / 4;
+
+    // 3. Only trigger UI update if smoothed value actually changes
+    static uint8_t last_displayed_wpm = 255;
+    if (arc_wpm && label_wpm && smoothed_wpm != last_displayed_wpm) {
+        last_displayed_wpm = smoothed_wpm;
+
+        lv_arc_set_value(arc_wpm, smoothed_wpm);
+        
+        lv_color_t dynamic_color = get_wpm_color(smoothed_wpm);
+        lv_obj_set_style_arc_color(arc_wpm, dynamic_color, LV_PART_INDICATOR);
+        
+        lv_label_set_text_fmt(label_wpm, "%u", smoothed_wpm);
+        lv_obj_center(label_wpm);
     }
 
     if (label_key_press) {

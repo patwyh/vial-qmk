@@ -68,7 +68,7 @@
 #define BACKLIGHT_PWM_CHANNEL RP2040_PWM_CHANNEL_A
 //#define BACKLIGHT_PWM_COUNTER_FREQUENCY 1000000 
 
-#define BACKLIGHT_LEVELS 5     // Number of brightness steps (max 31)
+//#define BACKLIGHT_LEVELS 5     // Number of brightness steps (max 31)
 #define BACKLIGHT_DEFAULT_LEVEL 3    // Default brightness level (out of 5)
 #define BACKLIGHT_ON_STATE 0   // Use 1 for high-active (common) or 0 for low-active
 #define BACKLIGHT_DEFAULT_ON true    // Ensure backlight is ON by default
