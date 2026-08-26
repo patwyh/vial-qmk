@@ -45,16 +45,6 @@
 // ST7789 Display configuration
 #define ST7789_NUM_DEVICES 1
 #define QUANTUM_PAINTER_NUM_DEVICES 1  // Default is 1; increase for multiple displays
-#define QP_ST7789_WIDTH 172 //135
-#define QP_ST7789_HEIGHT 320 //240
-// Optional offsets if content is misaligned:
-// #define QP_ST7789_OFFSET_X 0
-// #define QP_ST7789_OFFSET_Y 52  // Example for some 240x240 panels cropped to smaller area
-
-// #define BACKLIGHT_LEVELS 5     // Number of brightness steps (max 31)
-// #define BACKLIGHT_DEFAULT_LEVEL 5    // Default brightness level (out of 5)
-// #define BACKLIGHT_DEFAULT_ON true    // Ensure backlight is ON by default
-// #define BACKLIGHT_ON_STATE 1   // Use 1 for high-active (common) or 0 for low-active
 
 /* SPI Setting */
 #define SPI_DRIVER      SPID0
@@ -62,21 +52,18 @@
 #define SPI_SCK_PIN     GP18     // Clock
 #define SPI_MOSI_PIN    GP19     // Master -> Slave
 #define SPI_MISO_PIN    GP16     // Master <- Slave
-#define SPI_RESET_PIN   GP24
-#define SPI_DC_PIN      GP25
 #define SPI_DIVISOR     1    // SPI Clock Divisor
 #define SPI_MODE        3
 
 /* LCD setting */
 #define LCD_RESET_PIN       GP24
-#define LCD_BACKLIGHT_PIN   GP10
 #define LCD_DC_PIN          GP25
+#define LCD_BACKLIGHT_PIN   GP10
 #define LCD_HEIGHT          320//240
-#define LCD_WIDTH           172//135
-#define LCD_OFFSETX         0//52
-#define LCD_OFFSETY         0//40
+#define LCD_WIDTH           135//172
+#define LCD_OFFSETX         52
+#define LCD_OFFSETY         40
 
-#define BACKLIGHT_PIN GP10
 #define BACKLIGHT_PWM_DRIVER PWMD5
 #define BACKLIGHT_PWM_CHANNEL RP2040_PWM_CHANNEL_A
 //#define BACKLIGHT_PWM_COUNTER_FREQUENCY 1000000 

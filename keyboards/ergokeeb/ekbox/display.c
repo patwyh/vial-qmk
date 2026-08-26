@@ -24,6 +24,7 @@ static lv_obj_t *label_gui;
 static lv_obj_t *label_wpm;
 static lv_obj_t *arc_wpm; // Arc object reference
 static lv_obj_t *label_layer;
+static lv_obj_t *label_key_press;
 
 
 // Helper function to map layer index to a name
@@ -35,6 +36,31 @@ static const char *get_layer_name(uint8_t layer) {
         case 3:  return "3 SYM";
         case 4:  return "4 MEDIA";
         default: return "5 EXTRA";
+    }
+}
+
+// Convert basic QMK keycodes to displayable characters/names
+static const char *keycode_to_str(uint16_t keycode) {
+    if (keycode >= KC_A && keycode <= KC_Z) {
+        static char letter[2] = {0};
+        letter[0] = 'A' + (keycode - KC_A);
+        return letter;
+    }
+    if (keycode >= KC_1 && keycode <= KC_0) {
+        static char num[2] = {0};
+        num[0] = (keycode == KC_0) ? '0' : ('1' + (keycode - KC_1));
+        return num;
+    }
+    
+    switch (keycode) {
+        case KC_SPACE: return "SPC";
+        case KC_ENTER: return "ENT";
+        case KC_BSPC:  return "BSPC";
+        case KC_TAB:   return "TAB";
+        case KC_ESC:   return "ESC";
+        case KC_DOT:   return ".";
+        case KC_COMM:  return ",";
+        default:       return "---";
     }
 }
 
@@ -124,6 +150,13 @@ void init_screen_home(void) {
 
     //label_caps = create_button(screen_home, "CAPS", &style_button, &style_button_active);
     label_layer = create_button(screen_home, "0 BASE", &style_button, &style_button_active);
+
+    // Label for displaying active modifiers + last pressed key
+    label_key_press = lv_label_create(screen_home);
+    lv_label_set_text(label_key_press, "KEY: NONE");
+    #if LV_FONT_MONTSERRAT_28
+        lv_obj_set_style_text_font(label_key_press, &lv_font_montserrat_28, LV_PART_MAIN);
+    #endif
 }
 
 void display_process_layer(layer_state_t state) {
@@ -138,14 +171,14 @@ bool display_init_kb(void) {
 
     backlight_enable();
 
-    // painter_device_t display = qp_st7789_make_spi_device(240, 300, SPI_CS_PIN, SPI_DC_PIN, SPI_RESET_PIN, 16, 3);
+    // painter_device_t display = qp_st7789_make_spi_device(240, 300, SPI_CS_PIN, LCD_DC_PIN, LCD_RESET_PIN, 16, 3);
     // qp_set_viewport_offsets(display, 0, 20);
 
     // 1. Pass width = 135, height = 240 to the display initializer
-    painter_device_t display = qp_st7789_make_spi_device(135, 240, SPI_CS_PIN, SPI_DC_PIN, SPI_RESET_PIN, 16, 3);
+    painter_device_t display = qp_st7789_make_spi_device(LCD_WIDTH, LCD_HEIGHT, SPI_CS_PIN, LCD_DC_PIN, LCD_RESET_PIN, 16, 3);
 
     // 2. Adjust offsets (Standard 135x240 ST7789 modules require X offset = 52 or 53, Y offset = 40)
-    qp_set_viewport_offsets(display, 52, 40);
+    qp_set_viewport_offsets(display, LCD_OFFSETX, LCD_OFFSETY);
 
     if (!qp_init(display, QP_ROTATION_0) || !qp_power(display, true) || !qp_lvgl_attach(display)) return false;
 
@@ -180,9 +213,25 @@ __attribute__((weak)) void display_housekeeping_task(void) {
     if (label_wpm) {
         lv_label_set_text_fmt(label_wpm, "%u", get_current_wpm());
     }
+
+    if (label_key_press) {
+        uint8_t mods = get_mods() | get_oneshot_mods();
+        uint16_t key = get_last_pressed_keycode();
+        
+        // Format modifier prefix dynamically
+        char mod_str[32] = "";
+        if (mods & MOD_MASK_CTRL)  strcat(mod_str, "C-");
+        if (mods & MOD_MASK_ALT)   strcat(mod_str, "A-");
+        if (mods & MOD_MASK_SHIFT) strcat(mod_str, "S-");
+        if (mods & MOD_MASK_GUI)   strcat(mod_str, "G-");
+
+        lv_label_set_text_fmt(label_key_press, "%s%s", mod_str, keycode_to_str(key));
+    }
 }
 
 // __attribute__((weak)) void display_process_caps(bool active) {
 //     dprint("display_process_caps\n");
 //     toggle_state(label_caps, LV_STATE_PRESSED, active);
 // }
+
+

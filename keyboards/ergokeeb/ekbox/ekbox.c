@@ -5,6 +5,7 @@
 #include "display.h"
 
 static bool display_enabled;
+static uint16_t last_keycode = KC_NO;
 
 /* public function to be used in keymaps */
 bool is_display_enabled(void) {
@@ -44,4 +45,20 @@ void keyboard_post_init_kb(void) {
     }
 
     keyboard_post_init_user();
+}
+
+uint16_t get_last_pressed_keycode(void) {
+    return last_keycode;
+}
+
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    if (!process_record_user(keycode, record)) {
+        return false;
+    }
+    
+    // Capture basic keypresses on key down (ignoring modifier keys themselves)
+    if (record->event.pressed && keycode < QK_MODS) {
+        last_keycode = keycode;
+    }
+    return true;
 }
