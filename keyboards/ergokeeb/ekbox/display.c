@@ -22,7 +22,9 @@ static lv_obj_t *label_alt;
 static lv_obj_t *label_gui;
 //static lv_obj_t *label_caps;
 static lv_obj_t *label_wpm;
+static lv_obj_t *arc_wpm; // Arc object reference
 static lv_obj_t *label_layer;
+
 
 // Helper function to map layer index to a name
 static const char *get_layer_name(uint8_t layer) {
@@ -91,10 +93,33 @@ void init_screen_home(void) {
     // #if LV_FONT_MONTSERRAT_28
     //     lv_obj_set_style_text_font(label_ekbox, &lv_font_montserrat_28, LV_PART_MAIN);
     // #endif
-    label_wpm = lv_label_create(screen_home);
+
+    // --- WPM Arc Container ---
+    lv_obj_t *wpm_cont = lv_obj_create(screen_home);
+    lv_obj_add_style(wpm_cont, &style_container, 0);
+    use_flex_column(wpm_cont);
+
+    // Create Arc
+    arc_wpm = lv_arc_create(wpm_cont);
+    lv_obj_set_size(arc_wpm, 100, 100);
+    lv_arc_set_rotation(arc_wpm, 135);        // Rotate to start from bottom-left
+    lv_arc_set_bg_angles(arc_wpm, 0, 270);    // Background arc spans 270 degrees
+    lv_arc_set_range(arc_wpm, 0, 140);        // Max WPM scale (e.g., 0 to 140 WPM)
+    lv_arc_set_value(arc_wpm, 0);
+    lv_obj_remove_style(arc_wpm, NULL, LV_PART_KNOB); // Hide interactive knob
+    lv_obj_clear_flag(arc_wpm, LV_OBJ_FLAG_CLICKABLE);
+
+    // Styling the Arc
+    lv_obj_set_style_arc_color(arc_wpm, lv_palette_main(LV_PALETTE_GREY), LV_PART_MAIN);
+    lv_obj_set_style_arc_color(arc_wpm, lv_palette_main(LV_PALETTE_AMBER), LV_PART_INDICATOR);
+    lv_obj_set_style_arc_width(arc_wpm, 8, LV_PART_MAIN);
+    lv_obj_set_style_arc_width(arc_wpm, 8, LV_PART_INDICATOR);
+
+    // Create WPM Text Label below the arc
+    label_wpm = lv_label_create(wpm_cont);
     lv_label_set_text(label_wpm, "0");
-    #if LV_FONT_MONTSERRAT_48
-        lv_obj_set_style_text_font(label_wpm, &lv_font_montserrat_48, LV_PART_MAIN);
+    #if LV_FONT_MONTSERRAT_28
+        lv_obj_set_style_text_font(label_wpm, &lv_font_montserrat_28, LV_PART_MAIN);
     #endif
 
     //label_caps = create_button(screen_home, "CAPS", &style_button, &style_button_active);
