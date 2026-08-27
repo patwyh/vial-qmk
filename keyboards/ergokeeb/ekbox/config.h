@@ -60,9 +60,13 @@
 #define LCD_DC_PIN          GP25
 #define LCD_BACKLIGHT_PIN   GP10
 #define LCD_HEIGHT          320//240
-#define LCD_WIDTH           135//172
-#define LCD_OFFSETX         52
-#define LCD_OFFSETY         40
+#define LCD_WIDTH           172
+#define LCD_OFFSETX         34
+#define LCD_OFFSETY         0
+// #define LCD_HEIGHT          320//240
+// #define LCD_WIDTH           135//172
+// #define LCD_OFFSETX         52
+// #define LCD_OFFSETY         40
 
 #define BACKLIGHT_PWM_DRIVER PWMD5
 #define BACKLIGHT_PWM_CHANNEL RP2040_PWM_CHANNEL_A

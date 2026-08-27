@@ -19,7 +19,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 static painter_image_handle_t testimg;
 static painter_device_t display;
-static painter_font_handle_t my_font;
+//static painter_font_handle_t my_font;
 
 enum HSL
 {
@@ -70,11 +70,11 @@ void keyboard_post_init_user(void) {
     }
 
     // Draw the text (device, x, y, font_handle, text)
-    my_font = qp_load_font_mem(font_arial);
-    if (my_font != NULL) {
-        static const char *text = "EKBOX";
-        int16_t width = qp_textwidth(my_font, text);
-        qp_drawtext(display, (135 - width), (240 - my_font->line_height), my_font, text); 
-    }
+    // my_font = qp_load_font_mem(font_arial);
+    // if (my_font != NULL) {
+    //     static const char *text = "EKBOX";
+    //     int16_t width = qp_textwidth(my_font, text);
+    //     qp_drawtext(display, (135 - width), (240 - my_font->line_height), my_font, text); 
+    // }
 
 }

@@ -105,22 +105,34 @@ void init_styles(void) {
 void init_screen_home(void) {
     screen_home = lv_scr_act();
 
+    // Ensure full screen background stays solid black
+    lv_obj_set_style_bg_color(screen_home, lv_color_black(), 0);
+    lv_obj_set_style_bg_opa(screen_home, LV_OPA_COVER, 0);
+
+    // Force negative right margin to cover off-screen frame buffer artifacts 
+    lv_obj_set_style_pad_right(screen_home, -10, 0);
+
     lv_obj_add_style(screen_home, &style_screen, 0);
     
     // Stack items tightly from top to bottom instead of stretching them apart
-    lv_obj_set_layout(screen_home, LV_LAYOUT_FLEX);
-    lv_obj_set_flex_flow(screen_home, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_flex_align(screen_home, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    // lv_obj_set_layout(screen_home, LV_LAYOUT_FLEX);
+    // lv_obj_set_flex_flow(screen_home, LV_FLEX_FLOW_COLUMN);
+    // lv_obj_set_flex_align(screen_home, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     
     // Zero out padding and gaps on the main screen container
-    lv_obj_set_style_pad_all(screen_home, 0, 0);
-    lv_obj_set_style_pad_row(screen_home, 2, 0);
+    // lv_obj_set_style_pad_all(screen_home, 0, 0);
+    // lv_obj_set_style_pad_row(screen_home, 2, 0);
+
+    // Evenly distribute top modifiers, middle gauge, and bottom layer across 320px
+    use_flex_column(screen_home);
+    lv_obj_set_style_pad_all(screen_home, 8, 0);
 
     // --- Top Modifier Rows ---
     lv_obj_t *mods = lv_obj_create(screen_home);
     lv_obj_add_style(mods, &style_container, 0);
     use_flex_column(mods);
-    lv_obj_set_style_pad_row(mods, 0, 0); // Remove gap between mod rows
+    lv_obj_set_style_pad_row(mods, 4, 0); 
+    //lv_obj_set_style_pad_row(mods, 0, 0); // Remove gap between mod rows
 
     lv_obj_t *mods_row1 = lv_obj_create(mods);
     lv_obj_add_style(mods_row1, &style_container, 0);
@@ -136,7 +148,8 @@ void init_screen_home(void) {
 
     // --- Middle WPM Dynamic Arc (Reduced from 130px to 90px) ---
     arc_wpm = lv_arc_create(screen_home);
-    lv_obj_set_size(arc_wpm, 90, 90);
+    //lv_obj_set_size(arc_wpm, 90, 90);
+    lv_obj_set_size(arc_wpm, 140, 140);
     lv_arc_set_rotation(arc_wpm, 135);
     lv_arc_set_bg_angles(arc_wpm, 0, 270);
     lv_arc_set_range(arc_wpm, 0, WPM_MAX);
@@ -148,10 +161,10 @@ void init_screen_home(void) {
     // Remove arc padding so it doesn't take invisible extra height
     lv_obj_set_style_pad_all(arc_wpm, 0, 0);
 
-    lv_obj_set_style_arc_width(arc_wpm, 6, LV_PART_MAIN);
+    lv_obj_set_style_arc_width(arc_wpm, 12, LV_PART_MAIN);
     lv_obj_set_style_arc_color(arc_wpm, lv_color_make(40, 40, 40), LV_PART_MAIN);
 
-    lv_obj_set_style_arc_width(arc_wpm, 6, LV_PART_INDICATOR);
+    lv_obj_set_style_arc_width(arc_wpm, 12, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc_wpm, lv_palette_main(LV_PALETTE_LIGHT_BLUE), LV_PART_INDICATOR);
 
     // WPM Label inside arc
