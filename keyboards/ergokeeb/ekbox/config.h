@@ -24,20 +24,29 @@
 
 #define PICO_XOSC_STARTUP_DELAY_MULTIPLIER 64
 
-// Trackpad diameter (required for scaling and calibration)
-#define CIRQUE_PINNACLE_DIAMETER_MM 23 //23 //35 //40
+// // Trackpad configuration 
+// #define CIRQUE_PINNACLE_DIAMETER_MM 23 //23 //35 //40
 
-// Optional enhancements
-#define CIRQUE_PINNACLE_TAP_ENABLE                  // Enable single-tap for left-click
-#define CIRQUE_PINNACLE_SECONDARY_TAP_ENABLE        // Enable secondary tap (e.g., right-click)
-#define POINTING_DEVICE_GESTURES_SCROLL_ENABLE      // Enable edge/circular scrolling
-#define POINTING_DEVICE_ROTATION_90                 // Adjust if the trackpad orientation requires rotation (common in split keyboards) default left, 270 top
+// // Optional enhancements
+// #define CIRQUE_PINNACLE_TAP_ENABLE                  // Enable single-tap for left-click
+// #define CIRQUE_PINNACLE_SECONDARY_TAP_ENABLE        // Enable secondary tap (e.g., right-click)
+// #define POINTING_DEVICE_GESTURES_SCROLL_ENABLE      // Enable edge/circular scrolling
+// #define POINTING_DEVICE_ROTATION_90                 // Adjust if the trackpad orientation requires rotation (common in split keyboards) default left, 270 top
 
-#define POINTING_DEVICE_GESTURES_CURSOR_GLIDE_ENABLE              // (Optional) Enable inertial cursor. Cursor continues moving after a flick gesture and slows down by kinetic friction.
+// #define POINTING_DEVICE_GESTURES_CURSOR_GLIDE_ENABLE              // (Optional) Enable inertial cursor. Cursor continues moving after a flick gesture and slows down by kinetic friction.
 
-// Chip Select pin for the trackpad
-#define CIRQUE_PINNACLE_SPI_CS_PIN GP17 
-#define CIRQUE_PINNACLE_SPI_CS_PIN_RIGHT GP17
+// // Chip Select pin for the trackpad
+// #define CIRQUE_PINNACLE_SPI_CS_PIN GP17 
+// #define CIRQUE_PINNACLE_SPI_CS_PIN_RIGHT GP17
+
+// Trackball configuration
+// Set the layer activated when moving the trackball
+#define PMW33XX_CS_PIN      GP5    
+#define PMW3389_CPI         16000  // Sets default tracking speed (CPI range: 50-16000 
+#define POINTING_DEVICE_INVERT_Y
+#define AUTO_MOUSE_DEFAULT_LAYER 4 
+#define AUTO_MOUSE_TIME 650     // Timeout in milliseconds before returning to the previous layer
+
 
 #define POINTING_DEVICE_COMBINED
 #define SPLIT_POINTING_ENABLE

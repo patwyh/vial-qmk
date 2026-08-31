@@ -44,7 +44,7 @@ static const char *get_layer_name(uint8_t layer) {
         case 1:  return "1 NAV";
         case 2:  return "2 NUM";
         case 3:  return "3 SYM";
-        case 4:  return "4 MEDIA";
+        case 4:  return "4 MOUSE";
         default: return "5 EXTRA";
     }
 }
@@ -242,23 +242,34 @@ __attribute__((weak)) void display_housekeeping_task(void) {
     // }
     // Live update WPM Gauge & Color
     uint8_t raw_wpm = get_current_wpm();
-    // 1. Force 0 WPM if value jittering at 1 or 2 while idle
+    
     if (raw_wpm <= 2) {
         raw_wpm = 0;
     }
-
-    // 2. Exponential Moving Average (Smooth out rapid changes)
-    smoothed_wpm = (smoothed_wpm * 3 + raw_wpm) / 4;
+    // Exponential Moving Average filter with explicit zero floor clamping
+    if (raw_wpm == 0 && smoothed_wpm <= 2) {
+        smoothed_wpm = 0;
+    } else {
+        smoothed_wpm = (smoothed_wpm * 3 + raw_wpm) / 4;
+    }
 
     // 3. Only trigger UI update if smoothed value actually changes
     static uint8_t last_displayed_wpm = 255;
     if (arc_wpm && label_wpm && smoothed_wpm != last_displayed_wpm) {
         last_displayed_wpm = smoothed_wpm;
 
-        lv_arc_set_value(arc_wpm, smoothed_wpm);
-        
-        lv_color_t dynamic_color = get_wpm_color(smoothed_wpm);
-        lv_obj_set_style_arc_color(arc_wpm, dynamic_color, LV_PART_INDICATOR);
+        if (smoothed_wpm == 0) {
+            lv_arc_set_value(arc_wpm, 0);
+            // Suppress indicator rendering to prevent 360-degree wrap-around draw bug
+            lv_obj_set_style_arc_opa(arc_wpm, LV_OPA_0, LV_PART_INDICATOR);
+        } else {
+            // Restore indicator opacity and update arc geometry
+            lv_obj_set_style_arc_opa(arc_wpm, LV_OPA_COVER, LV_PART_INDICATOR);
+            lv_arc_set_value(arc_wpm, smoothed_wpm);
+            
+            lv_color_t dynamic_color = get_wpm_color(smoothed_wpm);
+            lv_obj_set_style_arc_color(arc_wpm, dynamic_color, LV_PART_INDICATOR);
+        }
         
         lv_label_set_text_fmt(label_wpm, "%u", smoothed_wpm);
         lv_obj_center(label_wpm);
