@@ -65,7 +65,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 }
 
 // Optional callback if you want to perform custom display/state actions on trackball motion
-void pointing_device_task_user(report_pointing_device_t mouse_report) {
-    // QMK handles AUTO_MOUSE_DEFAULT_LAYER activation internally.
-    // layer_state_set_kb will be automatically called when the layer shifts.
-}
+// void pointing_device_task_user(report_pointing_device_t mouse_report) {
+//     // QMK handles AUTO_MOUSE_DEFAULT_LAYER activation internally.
+//     // layer_state_set_kb will be automatically called when the layer shifts.
+// }

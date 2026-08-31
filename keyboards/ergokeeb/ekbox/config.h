@@ -48,7 +48,7 @@
 #define AUTO_MOUSE_TIME 650     // Timeout in milliseconds before returning to the previous layer
 
 
-#define POINTING_DEVICE_COMBINED
+#define POINTING_DEVICE_RIGHT  //POINTING_DEVICE_COMBINED
 #define SPLIT_POINTING_ENABLE
 
 // ST7789 Display configuration
