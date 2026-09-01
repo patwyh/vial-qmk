@@ -5,6 +5,7 @@
 #include "qp.h"
 #include "lvgl_helpers.h"
 #include "wpm.h"
+#include "timer.h" 
 
 /* shared styles */
 lv_style_t style_screen;
@@ -28,6 +29,7 @@ static lv_obj_t *label_key_press;
 
 #define WPM_MAX 140 // Maximum WPM target for full arc gauge
 static uint8_t smoothed_wpm = 0; // Stores smoothed WPM state
+#define TRACKBALL_IDLE_TIMEOUT 300
 
 // Maps WPM speed to a color hue transition (e.g., Cool Blue -> Green -> Vibrant Orange)
 static lv_color_t get_wpm_color(uint8_t wpm) {
@@ -216,13 +218,6 @@ void init_screen_home(void) {
     #endif
 }
 
-void display_process_layer(layer_state_t state) {
-    uint8_t highest_layer = get_highest_layer(state);
-    if (label_layer) {
-        lv_label_set_text(label_layer, get_layer_name(highest_layer));
-    }
-}
-
 bool display_init_kb(void) {
     dprint("display_init_kb - start\n");
 
@@ -260,46 +255,37 @@ __attribute__((weak)) bool display_init_user(void) {
 }
 
 __attribute__((weak)) void display_housekeeping_task(void) {
-    dprint("display_housekeeping_task_kb\n");
+    // 1. Completely bypass display updates if trackball was recently active
+    if (timer_elapsed32(last_trackball_activity) < TRACKBALL_IDLE_TIMEOUT) {
+        return; 
+    }
+
+    // Throttle UI updates to ~30 FPS (33ms) to free CPU for trackball polling
+    static uint16_t wpm_timer = 0;
+    if (timer_elapsed(wpm_timer) < 100) {
+        return;
+    }
+    wpm_timer = timer_read();
 
     toggle_state(label_shift, LV_STATE_PRESSED, MODS_SHIFT);
     toggle_state(label_ctrl, LV_STATE_PRESSED, MODS_CTRL);
     toggle_state(label_alt, LV_STATE_PRESSED, MODS_ALT);
     toggle_state(label_gui, LV_STATE_PRESSED, MODS_GUI);
-    
-    // if (label_wpm) {
-    //     lv_label_set_text_fmt(label_wpm, "%u", get_current_wpm());
-    // }
-    // Live update WPM Gauge & Color
+
     uint8_t raw_wpm = get_current_wpm();
-    
-    if (raw_wpm <= 2) {
-        raw_wpm = 0;
-    }
-    // Exponential Moving Average filter with explicit zero floor clamping
-    if (raw_wpm == 0 && smoothed_wpm <= 2) {
-        smoothed_wpm = 0;
-    } else {
-        smoothed_wpm = (smoothed_wpm * 3 + raw_wpm) / 4;
-    }
+    if (raw_wpm <= 2) raw_wpm = 0;
+
+    smoothed_wpm = (smoothed_wpm * 3 + raw_wpm) / 4;
 
     // 3. Only trigger UI update if smoothed value actually changes
     static uint8_t last_displayed_wpm = 255;
     if (arc_wpm && label_wpm && smoothed_wpm != last_displayed_wpm) {
         last_displayed_wpm = smoothed_wpm;
 
-        if (smoothed_wpm == 0) {
-            lv_arc_set_value(arc_wpm, 0);
-            // Suppress indicator rendering to prevent 360-degree wrap-around draw bug
-            lv_obj_set_style_arc_opa(arc_wpm, LV_OPA_0, LV_PART_INDICATOR);
-        } else {
-            // Restore indicator opacity and update arc geometry
-            lv_obj_set_style_arc_opa(arc_wpm, LV_OPA_COVER, LV_PART_INDICATOR);
-            lv_arc_set_value(arc_wpm, smoothed_wpm);
-            
-            lv_color_t dynamic_color = get_wpm_color(smoothed_wpm);
-            lv_obj_set_style_arc_color(arc_wpm, dynamic_color, LV_PART_INDICATOR);
-        }
+        lv_arc_set_value(arc_wpm, smoothed_wpm);
+        
+        lv_color_t dynamic_color = get_wpm_color(smoothed_wpm);
+        lv_obj_set_style_arc_color(arc_wpm, dynamic_color, LV_PART_INDICATOR);
         
         lv_label_set_text_fmt(label_wpm, "%u", smoothed_wpm);
         lv_obj_center(label_wpm);

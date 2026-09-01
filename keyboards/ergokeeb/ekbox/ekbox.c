@@ -7,10 +7,19 @@
 
 static bool display_enabled;
 static uint16_t last_keycode = KC_NO;
+volatile uint32_t last_trackball_activity = 0;
 
 /* public function to be used in keymaps */
 bool is_display_enabled(void) {
     return display_enabled;
+}
+
+// Track trackball movement
+report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
+    if (mouse_report.x != 0 || mouse_report.y != 0) {
+        last_trackball_activity = timer_read32(); // Record movement time
+    }
+    return pointing_device_task_user(mouse_report);
 }
 
 // Intercept layer state changes and update display

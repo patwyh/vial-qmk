@@ -15,6 +15,8 @@ extern lv_style_t style_container;
 extern lv_style_t style_button;
 extern lv_style_t style_button_active;
 
+extern volatile uint32_t last_trackball_activity; // Activity timestamp
+
 bool display_init_kb(void);
 bool display_init_user(void);
 void display_housekeeping_task(void);
