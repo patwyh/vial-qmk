@@ -41,7 +41,7 @@
 
 // Trackball configuration
 // Set the layer activated when moving the trackball
-#define PMW33XX_CS_PIN      GP5    
+#define PMW33XX_CS_PIN      GP17    
 #define PMW3389_CPI         16000  // Sets default tracking speed (CPI range: 50-16000 
 #define POINTING_DEVICE_INVERT_Y
 #define AUTO_MOUSE_DEFAULT_LAYER 4 
