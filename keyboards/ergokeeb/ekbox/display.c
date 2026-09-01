@@ -74,6 +74,36 @@ static const char *keycode_to_str(uint16_t keycode) {
     }
 }
 
+// Maps each layer to a specific LVGL background color
+static lv_color_t get_layer_bg_color(uint8_t layer) {
+    switch (layer) {
+        case 0:  return lv_color_black();                           // Default / Base Layer
+        case 1:  return lv_color_make(15, 35, 60);                  // Dark Blue for Nav
+        case 2:  return lv_color_make(50, 20, 20);                  // Dark Red for Num
+        case 3:  return lv_color_make(20, 50, 30);                  // Dark Green for Sym
+        case 4:  return lv_color_make(45, 20, 50);                  // Dark Purple for Media
+        default: return lv_color_make(30, 30, 30);                  // Dark Gray for Fallback
+    }
+}
+
+void display_process_layer(layer_state_t state) {
+    uint8_t highest_layer = get_highest_layer(state);
+
+    // Update layer label text
+    if (label_layer) {
+        lv_label_set_text(label_layer, get_layer_name(highest_layer));
+    }
+
+    // Update screen background color dynamically based on active layer
+    if (screen_home) {
+        lv_color_t bg_color = get_layer_bg_color(highest_layer);
+        
+        // Apply the color to the screen's main background
+        lv_obj_set_style_bg_color(screen_home, bg_color, LV_PART_MAIN);
+        lv_obj_set_style_bg_opa(screen_home, LV_OPA_COVER, LV_PART_MAIN);
+    }
+}
+
 void init_styles(void) {
     lv_style_init(&style_screen);
     lv_style_set_bg_color(&style_screen, lv_color_black());
@@ -110,7 +140,7 @@ void init_screen_home(void) {
     lv_obj_set_style_bg_opa(screen_home, LV_OPA_COVER, 0);
 
     // Force negative right margin to cover off-screen frame buffer artifacts 
-    lv_obj_set_style_pad_right(screen_home, -10, 0);
+    //lv_obj_set_style_pad_right(screen_home, -10, 0);
 
     lv_obj_add_style(screen_home, &style_screen, 0);
     

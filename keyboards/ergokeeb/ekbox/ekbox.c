@@ -43,6 +43,7 @@ void keyboard_post_init_kb(void) {
 
     if (is_keyboard_left()) {
         display_enabled = display_init_kb();
+        display_process_layer(layer_state); // Update display with current layer state
     }
 
     keyboard_post_init_user();
@@ -69,3 +70,4 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 //     // QMK handles AUTO_MOUSE_DEFAULT_LAYER activation internally.
 //     // layer_state_set_kb will be automatically called when the layer shifts.
 // }
+
