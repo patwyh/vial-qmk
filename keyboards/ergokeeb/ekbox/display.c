@@ -29,7 +29,7 @@ static lv_obj_t *label_key_press;
 
 #define WPM_MAX 140 // Maximum WPM target for full arc gauge
 static uint8_t smoothed_wpm = 0; // Stores smoothed WPM state
-#define TRACKBALL_IDLE_TIMEOUT 300
+#define TRACKBALL_IDLE_TIMEOUT 500
 
 // Maps WPM speed to a color hue transition (e.g., Cool Blue -> Green -> Vibrant Orange)
 static lv_color_t get_wpm_color(uint8_t wpm) {

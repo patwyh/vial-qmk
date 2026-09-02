@@ -16,7 +16,7 @@ bool is_display_enabled(void) {
 
 // Track trackball movement
 report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
-    if (mouse_report.x != 0 || mouse_report.y != 0) {
+    if (mouse_report.x != 0 || mouse_report.y != 0 || mouse_report.buttons != 0) {
         last_trackball_activity = timer_read32(); // Record movement time
     }
     return pointing_device_task_user(mouse_report);
