@@ -16,6 +16,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
+void pointing_device_init_user(void) {
+    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+
+static bool is_v_scroll_active = false;
+static bool is_h_scroll_active = false;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    return true; // Keep standard key processing intact
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    uint8_t mods = get_mods() | get_oneshot_mods();
+    
+    // Check modifier states after key events resolve
+    is_v_scroll_active = (mods & MOD_MASK_SHIFT);
+    is_h_scroll_active = (mods & MOD_MASK_CTRL);
+}
+
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // If Shift is held, scroll vertically
+    if (is_v_scroll_active) {
+        mouse_report.v = -mouse_report.y; // Vertical scroll (y-axis)
+        mouse_report.x = 0;               // Block cursor X
+        mouse_report.y = 0;               // Block cursor Y
+    } 
+    // If Ctrl is held, scroll horizontally
+    else if (is_h_scroll_active) {
+        mouse_report.h = mouse_report.x;  // Horizontal scroll (x-axis)
+        mouse_report.x = 0;               // Block cursor X
+        mouse_report.y = 0;               // Block cursor Y
+    }
+    
+    return mouse_report;
+}
 
 static painter_image_handle_t testimg;
 static painter_device_t display;

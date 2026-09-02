@@ -4,6 +4,7 @@
 #include "ekbox.h"
 #include "display.h"
 #include "pointing_device.h"
+#include "print.h"
 
 static bool display_enabled;
 static uint16_t last_keycode = KC_NO;
@@ -62,7 +63,30 @@ uint16_t get_last_pressed_keycode(void) {
     return last_keycode;
 }
 
+// Track pressed states for matrix (0,0) and (0,1)
+static bool key_0_0_pressed = false;
+static bool key_0_1_pressed = false;
+
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    // Read the matrix row and column directly
+    uint8_t row = record->event.key.row;
+    uint8_t col = record->event.key.col;
+
+    dprintf("Keycode: %u, Row: %u, Col: %u, Pressed: %s\n", keycode, row, col, record->event.pressed ? "true" : "false");
+
+    // Check if the event is happening on Left Keyboard matrix positions (0,0) or (0,1)
+    if (row == 0 && col == 0) {
+        key_0_0_pressed = record->event.pressed;
+        if (key_0_0_pressed && key_0_1_pressed && display_enabled) {
+            toggle_wpm_arc_visibility();
+        }
+    } else if (row == 0 && col == 1) {
+        key_0_1_pressed = record->event.pressed;
+        if (key_0_0_pressed && key_0_1_pressed && display_enabled) {
+            toggle_wpm_arc_visibility();
+        }
+    }
+
     if (!process_record_user(keycode, record)) {
         return false;
     }

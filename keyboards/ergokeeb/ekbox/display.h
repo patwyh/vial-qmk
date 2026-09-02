@@ -24,3 +24,4 @@ void display_process_caps(bool active);
 void display_process_layer(layer_state_t state);
 // Update the external declaration
 uint16_t get_last_pressed_keycode(void);
+void toggle_wpm_arc_visibility(void);

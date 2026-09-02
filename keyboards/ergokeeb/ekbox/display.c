@@ -27,9 +27,21 @@ static lv_obj_t *arc_wpm; // Arc object reference
 static lv_obj_t *label_layer;
 static lv_obj_t *label_key_press;
 
+// Track visibility state
+static bool wpm_arc_visible = true;
+
 #define WPM_MAX 140 // Maximum WPM target for full arc gauge
 static uint8_t smoothed_wpm = 0; // Stores smoothed WPM state
 #define TRACKBALL_IDLE_TIMEOUT 500
+
+void toggle_wpm_arc_visibility(void) {
+    if (!arc_wpm) return;
+    
+    wpm_arc_visible = !wpm_arc_visible;
+    
+    // Toggle LVGL hidden flag on arc_wpm
+    toggle_hidden(arc_wpm, wpm_arc_visible);
+}
 
 // Maps WPM speed to a color hue transition (e.g., Cool Blue -> Green -> Vibrant Orange)
 static lv_color_t get_wpm_color(uint8_t wpm) {
@@ -265,16 +277,16 @@ __attribute__((weak)) void display_housekeeping_task(void) {
     if (timer_elapsed(wpm_timer) < 100) {
         return;
     }
-    wpm_timer = timer_read();
 
     toggle_state(label_shift, LV_STATE_PRESSED, MODS_SHIFT);
     toggle_state(label_ctrl, LV_STATE_PRESSED, MODS_CTRL);
     toggle_state(label_alt, LV_STATE_PRESSED, MODS_ALT);
     toggle_state(label_gui, LV_STATE_PRESSED, MODS_GUI);
 
+    wpm_timer = timer_read();
+
     uint8_t raw_wpm = get_current_wpm();
     if (raw_wpm <= 2) raw_wpm = 0;
-
     smoothed_wpm = (smoothed_wpm * 3 + raw_wpm) / 4;
 
     // 3. Only trigger UI update if smoothed value actually changes

@@ -42,14 +42,16 @@
 // Trackball configuration
 // Set the layer activated when moving the trackball
 #define PMW33XX_CS_PIN      GP17    
-#define PMW3389_CPI         6000  // Sets default tracking speed (CPI range: 50-16000 
+#define PMW3389_CPI         1000  // Sets default tracking speed (CPI range: 50-16000 
 #define POINTING_DEVICE_INVERT_Y
+#define POINTING_DEVICE_AUTO_MOUSE_ENABLE
 #define AUTO_MOUSE_DEFAULT_LAYER 4 
 #define AUTO_MOUSE_TIME 650     // Timeout in milliseconds before returning to the previous layer
 
-
 #define POINTING_DEVICE_RIGHT  //POINTING_DEVICE_COMBINED
 #define POINTING_DEVICE_TASK_THROTTLE_MS 1
+#define POINTING_DEVICE_DRAG_SCROLL_ENABLE
+#define POINTING_DEVICE_DRAG_SCROLL_DOWNSCALE 8
 #define SPLIT_POINTING_ENABLE
 
 // ST7789 Display configuration
@@ -90,3 +92,5 @@
 #define QUANTUM_PAINTER_LVGL_USE_CUSTOM_CONF
 #define QUANTUM_PAINTER_DISPLAY_TIMEOUT 0
 
+#define DEBUG_ACTION
+#define OS_DETECTION_DEBUG_ENABLE
