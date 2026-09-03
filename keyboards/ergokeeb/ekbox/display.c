@@ -28,7 +28,7 @@ static lv_obj_t *label_layer;
 static lv_obj_t *label_key_press;
 
 // Track visibility state
-static bool wpm_arc_visible = true;
+static bool wpm_arc_visible = false;
 
 #define WPM_MAX 140 // Maximum WPM target for full arc gauge
 static uint8_t smoothed_wpm = 0; // Stores smoothed WPM state
@@ -88,33 +88,34 @@ static const char *keycode_to_str(uint16_t keycode) {
     }
 }
 
-// Maps each layer to a specific LVGL background color
+// Maps each layer to a specific solid background color for the layer label
 static lv_color_t get_layer_bg_color(uint8_t layer) {
     switch (layer) {
-        case 0:  return lv_color_black();                           // Default / Base Layer
-        case 1:  return lv_color_make(15, 35, 60);                  // Dark Blue for Nav
-        case 2:  return lv_color_make(50, 20, 20);                  // Dark Red for Num
-        case 3:  return lv_color_make(20, 50, 30);                  // Dark Green for Sym
-        case 4:  return lv_color_make(45, 20, 50);                  // Dark Purple for Media
-        default: return lv_color_make(30, 30, 30);                  // Dark Gray for Fallback
+        case 0:  return lv_color_make(60, 60, 60);                  // Solid Charcoal/Gray for Base
+        case 1:  return lv_color_make(0, 120, 255);                 // Solid Bright Blue for Nav
+        case 2:  return lv_color_make(230, 40, 40);                 // Solid Bright Red for Num
+        case 3:  return lv_color_make(40, 180, 70);                 // Solid Bright Green for Sym
+        case 4:  return lv_color_make(160, 32, 240);                // Solid Bright Purple for Mouse
+        default: return lv_color_make(100, 100, 100);               // Solid Light Gray for Fallback
     }
 }
 
 void display_process_layer(layer_state_t state) {
     uint8_t highest_layer = get_highest_layer(state);
 
-    // Update layer label text
     if (label_layer) {
+        // Update layer label text
         lv_label_set_text(label_layer, get_layer_name(highest_layer));
-    }
-
-    // Update screen background color dynamically based on active layer
-    if (screen_home) {
-        lv_color_t bg_color = get_layer_bg_color(highest_layer);
         
-        // Apply the color to the screen's main background
-        lv_obj_set_style_bg_color(screen_home, bg_color, LV_PART_MAIN);
-        lv_obj_set_style_bg_opa(screen_home, LV_OPA_COVER, LV_PART_MAIN);
+        // Get layer solid color
+        lv_color_t bg_color = get_layer_bg_color(highest_layer);
+
+        // Apply solid background color exclusively to the layer label button
+        lv_obj_set_style_bg_color(label_layer, bg_color, LV_PART_MAIN);
+        lv_obj_set_style_bg_opa(label_layer, LV_OPA_COVER, LV_PART_MAIN);
+
+        // Optional: Change label text to white for maximum contrast against solid colors
+        lv_obj_set_style_text_color(label_layer, lv_color_white(), LV_PART_MAIN);
     }
 }
 
@@ -192,6 +193,10 @@ void init_screen_home(void) {
 
     // --- Middle WPM Dynamic Arc (Reduced from 130px to 90px) ---
     arc_wpm = lv_arc_create(screen_home);
+    // Hide the WPM arc by default on startup
+    if (arc_wpm) {
+        toggle_hidden(arc_wpm, wpm_arc_visible);
+    }
     //lv_obj_set_size(arc_wpm, 90, 90);
     lv_obj_set_size(arc_wpm, 140, 140);
     lv_arc_set_rotation(arc_wpm, 135);
