@@ -63,27 +63,58 @@ static const char *get_layer_name(uint8_t layer) {
     }
 }
 
-// Convert basic QMK keycodes to displayable characters/names
+// Convert QMK keycodes (including layer-taps and numpad) to displayable characters
 static const char *keycode_to_str(uint16_t keycode) {
-    if (keycode >= KC_A && keycode <= KC_Z) {
+    // Strip Mod-Tap, Layer-Tap, and Shift modifiers to get the base 8-bit keycode
+    uint16_t base_keycode = keycode & 0xFF; 
+
+    // Handle standard A-Z
+    if (base_keycode >= KC_A && base_keycode <= KC_Z) {
         static char letter[2] = {0};
-        letter[0] = 'A' + (keycode - KC_A);
+        letter[0] = 'A' + (base_keycode - KC_A);
         return letter;
     }
-    if (keycode >= KC_1 && keycode <= KC_0) {
+    // Handle standard 0-9
+    if (base_keycode >= KC_1 && base_keycode <= KC_0) {
         static char num[2] = {0};
-        num[0] = (keycode == KC_0) ? '0' : ('1' + (keycode - KC_1));
+        num[0] = (base_keycode == KC_0) ? '0' : ('1' + (base_keycode - KC_1));
         return num;
     }
+    // Handle Numpad 0-9 (often used on secondary layers)
+    if (base_keycode >= KC_P1 && base_keycode <= KC_P0) {
+        static char pnum[2] = {0};
+        pnum[0] = (base_keycode == KC_P0) ? '0' : ('1' + (base_keycode - KC_P1));
+        return pnum;
+    }
     
-    switch (keycode) {
+    switch (base_keycode) {
         case KC_SPACE: return "SPC";
-        case KC_ENTER: return "ENT";
+        case KC_ENTER: 
+        case KC_PENT:  return "ENT";
         case KC_BSPC:  return "BSPC";
         case KC_TAB:   return "TAB";
         case KC_ESC:   return "ESC";
-        case KC_DOT:   return ".";
+        case KC_DOT:   
+        case KC_PDOT:  return ".";
         case KC_COMM:  return ",";
+        
+        // Navigation keys
+        case KC_UP:    return "UP";
+        case KC_DOWN:  return "DOWN";
+        case KC_LEFT:  return "LEFT";
+        case KC_RIGHT: return "RIGHT";
+        case KC_PGUP:  return "PGUP";
+        case KC_PGDN:  return "PGDN";
+
+        // Basic symbols
+        case KC_MINS: 
+        case KC_PMNS:  return "-";
+        case KC_EQL:   
+        case KC_PPLS:  return "+";
+        case KC_SLSH:  
+        case KC_PSLS:  return "/";
+        case KC_PAST:  return "*";
+        
         default:       return "---";
     }
 }

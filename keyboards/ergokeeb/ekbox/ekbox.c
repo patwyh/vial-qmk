@@ -23,7 +23,7 @@ report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
     return pointing_device_task_user(mouse_report);
 }
 
-// Intercept layer state changes and update display
+// Intercept layer state changes and update display 
 layer_state_t layer_state_set_kb(layer_state_t state) {
     state = layer_state_set_user(state);
     if (display_enabled) {
