@@ -138,18 +138,18 @@ void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
-    // If Shift is held, scroll vertically
-    if (is_v_scroll_active) {
-        mouse_report.v = -mouse_report.y; // Vertical scroll (y-axis)
-        mouse_report.x = 0;               // Block cursor X
-        mouse_report.y = 0;               // Block cursor Y
-    } 
-    // If Ctrl is held, scroll horizontally
-    else if (is_h_scroll_active) {
-        mouse_report.h = mouse_report.x;  // Horizontal scroll (x-axis)
-        mouse_report.x = 0;               // Block cursor X
-        mouse_report.y = 0;               // Block cursor Y
-    }
+    // // If Shift is held, scroll vertically
+    // if (is_v_scroll_active) {
+    //     mouse_report.v = -mouse_report.y; // Vertical scroll (y-axis)
+    //     mouse_report.x = 0;               // Block cursor X
+    //     mouse_report.y = 0;               // Block cursor Y
+    // } 
+    // // If Ctrl is held, scroll horizontally
+    // else if (is_h_scroll_active) {
+    //     mouse_report.h = mouse_report.x;  // Horizontal scroll (x-axis)
+    //     mouse_report.x = 0;               // Block cursor X
+    //     mouse_report.y = 0;               // Block cursor Y
+    // }
     
     return mouse_report;
 }
@@ -171,6 +171,9 @@ const uint8_t red[]   = {0,   255, 127};
 const uint8_t blue[]  = {170, 255, 127};
 
 void keyboard_post_init_user(void) {
+    // Sets the auto mouse layer timeout to 500 milliseconds
+    set_auto_mouse_timeout(500);
+
     debug_enable = true;
     debug_matrix = true;
     debug_keyboard=true;
