@@ -32,7 +32,7 @@ static bool wpm_arc_visible = false;
 
 #define WPM_MAX 140 // Maximum WPM target for full arc gauge
 static uint8_t smoothed_wpm = 0; // Stores smoothed WPM state
-#define TRACKBALL_IDLE_TIMEOUT 500
+#define TRACKBALL_IDLE_TIMEOUT 200 // 200ms idle threshold for trackball inactivity 
 
 void toggle_wpm_arc_visibility(void) {
     if (!arc_wpm) return;
@@ -303,7 +303,6 @@ __attribute__((weak)) bool display_init_user(void) {
 }
 
 __attribute__((weak)) void display_housekeeping_task(void) {
-    // 1. Completely bypass display updates if trackball was recently active
     if (timer_elapsed32(last_trackball_activity) < TRACKBALL_IDLE_TIMEOUT) {
         return; 
     }
