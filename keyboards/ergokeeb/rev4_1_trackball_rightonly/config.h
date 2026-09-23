@@ -23,6 +23,7 @@
 #define PMW33XX_CS_PIN      GP5    
 #define PMW3389_CPI         16000  // Sets default tracking speed 
 #define POINTING_DEVICE_INVERT_Y
+#define POINTING_DEVICE_ROTATION_270
 
 #define POINTING_DEVICE_RIGHT
 #define SPLIT_POINTING_ENABLE
