@@ -1,5 +1,5 @@
 {
-    "keyboard_name": "Corne v4 Trackball Right",
+    "keyboard_name": "ergokeeb EKCorne Trackball",
     "maintainer": "ergokeeb",
     "manufacturer": "ergokeeb",
     "url": "https://github.com/ergokeeb/corne",
@@ -33,7 +33,6 @@
             [  null,   null,   null, "GP14", "GP15", "GP11",   null]
         ]
     },
- 
     "encoder": {
         "rotary": [
             {"pin_a": "GP5", "pin_b": "GP7"},
@@ -52,16 +51,6 @@
         "handedness": {
             "pin": "GP21"
         },
-        // "matrix_pins": {
-        //     "right": {
-        //         "direct": [
-        //             [ "GP8",  "GP9",  "GP3",  "GP2",  "GP1", "GP27", "GP25"],
-        //             ["GP11", "GP14",  "GP4",  "GP0", "GP28", "GP26", "GP23"],
-        //             ["GP15", "GP18",  "GP5", "GP29", "GP20", "GP22",   null],
-        //             [  null,   null,   null, "GP16", "GP17", "GP19",   null]
-        //         ]
-        //     }
-        // },
         "matrix_pins": {
             "right": {
                 "direct": [
@@ -72,14 +61,6 @@
                 ]
             }
         },
-        // "encoder": {
-        //     "right": {
-        //         "rotary": [
-        //             {"pin_a": "GP5", "pin_b": "GP5"},
-        //             {"pin_a": "GP5", "pin_b": "GP5"}
-        //         ]
-        //     }
-        // },
         "serial": {
             "driver": "vendor"
         },
